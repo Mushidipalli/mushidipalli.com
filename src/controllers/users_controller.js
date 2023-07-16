@@ -64,33 +64,30 @@ module.exports.signUp = async function(req, res){
       if(!errors.isEmpty()){  
         res.status(400).json({ errors: errors.array() });
       }else{
-          const checkUser = await User.findOne({contact:req.body.contact});
-          if(checkUser){
-            return res.status(200).json({
-              message:'Phone Number existed'
-            })
+              
+              const checkUser = await User.findOne({contact:req.body.contact});
+              console.log(checkUser);
+              if(checkUser){
+                  return res.status(400).json({
+                    message:'Phone Number already existed'
+                  })
 
-          }else{
-
-
-          const hashPassword = await bcrypt.hash(req.body.password, 10,);
-         
-
-
-            const user = new User({name:req.body.name,email:req.body.email,contact:req.body.contact,permanentAddress:req.body.permanentAddress,designation:req.body.designation,currentAddress:req.body.currentAddress,gender:req.body.gender,password:hashPassword});
-             await user.save();
-             return res.status(200).json({
-              message:'Signup successful',
-              user
+              }else{
+                const hashPassword = await bcrypt.hash(req.body.password, 10,);
+      
+                const user = new User({name:req.body.name,email:req.body.email,contact:req.body.contact,permanentAddress:req.body.permanentAddress,designation:req.body.designation,currentAddress:req.body.currentAddress,gender:req.body.gender,password:hashPassword});
+                 await user.save();
+                 return res.status(200).json({
+                  message:'Signup successful',
   
-            })
+                })
 
           }
           
       }
       
   } catch (error) {
-    
+    console.log(error);
     error.message='Signup faild'
    return res.status(500).json(error.message);
 
