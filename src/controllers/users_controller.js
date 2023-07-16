@@ -59,7 +59,7 @@ module.exports.signIn = async function(req, res,next){
 module.exports.signUp = async function(req, res){
     
     try {
-      console.log(req.body);
+      
       const errors = validationResult(req);
       if(!errors.isEmpty()){  
         res.status(400).json({ errors: errors.array() });
@@ -90,7 +90,7 @@ module.exports.signUp = async function(req, res){
       }
       
   } catch (error) {
-    console.log(error);
+    
     error.message='Signup faild'
    return res.status(500).json(error.message);
 
@@ -180,18 +180,5 @@ module.exports.verification = async (req,res)=>{
 }
 
 
-module.exports.reqest = async (req, res, next)=>{
-  try {
-   
 
-    
-    
-  } catch (error) {
-    next(error)
-    
-  }
-  
- 
-  
-}
 
