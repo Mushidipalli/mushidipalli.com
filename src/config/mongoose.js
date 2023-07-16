@@ -3,8 +3,6 @@ const ENV = require('../../config');
 // mongoose config file
 const mongoose = require('mongoose');
 
-// const mongodbUri = 'mongodb+srv://pydamnaidu:f2SlFQdV6HqlaiBu@PlacementCell.cjh6ckr.mongodb.net/PlacementCell';
-// const mongodbUri = 'mongodb://127.0.0.1/mushidipalli';
 mongoose.set('strictQuery',false);
 
 mongoose.connect(ENV.valus.MONGODB_URL, {
