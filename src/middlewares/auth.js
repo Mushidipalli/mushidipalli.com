@@ -17,3 +17,23 @@ module.exports.Auth = async (req, res, next)=>{
         
     }
 }
+
+module.exports.adminAuth = async (req, res, next)=>{
+
+    try {
+       
+        const token = req.headers.authorization;
+        
+ 
+ 
+        const decodedToken =  await jwt.verify(token, ENV.valus.JWT_ADMIN_SECRET);
+        req.user = decodedToken;
+ 
+        next();
+         
+     } catch (error) {
+         res.status(401).json({erroe: "Authentication Faild"});
+         
+     }
+
+}

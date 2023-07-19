@@ -12,19 +12,19 @@ module.exports.signIn = async function(req, res,next){
     try {
           const errors = validationResult(req);
           if(!errors.isEmpty()){
-            res.status(400).json({ errors: errors.array() });
+           return res.status(400).json({ errors: errors.array() });
           }else{
             
             
             const user = await User.findOne({contact:req.body.contact});
             if (!user) {
-              res.status(400).json({
+              return res.status(401).json({
                 message:'No user with this Phone Number'
               });
             }else{
               const isMatch = bcrypt.compareSync(req.body.password, user.password);
               if (!isMatch) {
-                return res.status(400).json({
+                return res.status(401).json({
                   message:'Invalid password'
                 });
               } 
@@ -37,7 +37,7 @@ module.exports.signIn = async function(req, res,next){
 
               
      
-              res.status(200).json({
+              return res.status(200).json({
                 msg: "Login Successfull",
                 user: userData,
                 token
@@ -62,11 +62,11 @@ module.exports.signUp = async function(req, res){
       
       const errors = validationResult(req);
       if(!errors.isEmpty()){  
-        res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ errors: errors.array() });
       }else{
               
               const checkUser = await User.findOne({contact:req.body.contact});
-              console.log(checkUser);
+             
               if(checkUser){
                   return res.status(400).json({
                     message:'Phone Number already existed'
@@ -77,7 +77,7 @@ module.exports.signUp = async function(req, res){
       
                 const user = new User({name:req.body.name,email:req.body.email,contact:req.body.contact,permanentAddress:req.body.permanentAddress,designation:req.body.designation,currentAddress:req.body.currentAddress,gender:req.body.gender,password:hashPassword});
                  await user.save();
-                 return res.status(200).json({
+                 return res.status(201).json({
                   message:'Signup successful',
   
                 })
@@ -87,7 +87,7 @@ module.exports.signUp = async function(req, res){
       }
       
   } catch (error) {
-    console.log(error);
+   
     error.message='Signup faild'
    return res.status(500).json(error.message);
 
@@ -96,25 +96,26 @@ module.exports.signUp = async function(req, res){
      
 }
 
-module.exports.update = async function(req, res,next){
+module.exports.update = async function(req, res){
   // req.flash('success', 'You have logged out!');
   try {
 
     const errors = validationResult(req);
     if(!errors.isEmpty()){
        
-        res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ errors: errors.array() });
     }else{
-       const user = await User.findByIdAndUpdate(req.body.user._id,{ new: true });
+      
+       const user = await User.findByIdAndUpdate(req.user.userId,{currentAddress:req.body.currentAddress,designation:req.body.designation ,new: true });
        if(!user){
-           const error = new Error('user not found');
-           next(error);
+        return res.status(401).json({message:'user not found'})
+          
 
         }else{
-
-            res.status(200).json({
+           
+            return res.status(200).json({
                 message:'User updated successful',
-                item
+                user
      
              });
            
@@ -126,7 +127,7 @@ module.exports.update = async function(req, res,next){
     
     
   } catch (error) {
-    next(error);
+    return res.status(500).json({message:'Internal server Error'})
     
   }
 
@@ -141,7 +142,7 @@ module.exports.allUsers = async function(req, res,next){
      // req.flash('success', 'You have logged out!');
        try {
         const users = await User.find({});
-        res.status(200).json({
+        return res.status(200).json({
           users
         })
         
@@ -158,7 +159,7 @@ module.exports.verification = async (req,res)=>{
   try {
     const user = await User.findById(req.user.userId);
     if(!user){
-      return res.status(400).json({
+      return res.status(401).json({
         message:'User not found'
 
       })
@@ -168,7 +169,7 @@ module.exports.verification = async (req,res)=>{
 
     
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       message:'Internal server error'
     })
     

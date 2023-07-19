@@ -23,6 +23,7 @@ exports.dataValidation = [
     body('name').notEmpty().withMessage('name is required'),
     body('contact').notEmpty().withMessage('contact is required'),
     body('email').notEmpty().withMessage('email is required'),
+    body('designation').notEmpty().withMessage('designation is required'),
     body('gender').notEmpty().withMessage('gender is required'),
     body('permanentAddress').notEmpty().withMessage('PermanentAdress is required'),
     body('currentAddress').notEmpty().withMessage('currentAddress is required'),
@@ -32,12 +33,10 @@ exports.dataValidation = [
 
 // input validation from the request for updating the item
 exports.updateDataValidation = [
-    body('name').optional().notEmpty().withMessage('name is required'),
-    body('contact').optional().notEmpty().withMessage('contact is required'),
-    body('gender').optional().notEmpty().withMessage('emai is required'),
-    body('permanentAddress').optional().notEmpty().withMessage('gender is required'),
-    body('currentAddress').optional().notEmpty().withMessage('PermanentAdress is required'),
-    body('currentAddress').optional().notEmpty().withMessage('currentAddress is required')
+
+    body('designation').optional().notEmpty().withMessage('designation is required'),
+    body('currentAddress').optional().notEmpty().withMessage('currentAddress is required'),
+    
 ]
 
 exports.loginDataValidation = [
