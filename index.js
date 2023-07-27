@@ -1,6 +1,7 @@
 // express declaration
 const express = require('express');
 const cors = require('cors');
+const requestIp = require('request-ip');
 const bodyParser = require('body-parser');
 const errorHandling = require('./src/middlewares/errorHandling');
 // this web application is working on port 8000
@@ -15,7 +16,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(requestIp.mw());
 app.use('/',require('./src/api/routes/index'));
 app.use(errorHandling.errorHandling);
 app.listen(port,function(err){
